@@ -1,0 +1,231 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "TSrfqHB5ORRM",
+        "outputId": "dbcacfc5-f3b4-47f3-aa54-222cf2c4c312"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: openai in /usr/local/lib/python3.10/dist-packages (1.52.2)\n",
+            "Collecting openai\n",
+            "  Downloading openai-1.54.3-py3-none-any.whl.metadata (24 kB)\n",
+            "Requirement already satisfied: anyio<5,>=3.5.0 in /usr/local/lib/python3.10/dist-packages (from openai) (3.7.1)\n",
+            "Requirement already satisfied: distro<2,>=1.7.0 in /usr/local/lib/python3.10/dist-packages (from openai) (1.9.0)\n",
+            "Requirement already satisfied: httpx<1,>=0.23.0 in /usr/local/lib/python3.10/dist-packages (from openai) (0.27.2)\n",
+            "Requirement already satisfied: jiter<1,>=0.4.0 in /usr/local/lib/python3.10/dist-packages (from openai) (0.6.1)\n",
+            "Requirement already satisfied: pydantic<3,>=1.9.0 in /usr/local/lib/python3.10/dist-packages (from openai) (2.9.2)\n",
+            "Requirement already satisfied: sniffio in /usr/local/lib/python3.10/dist-packages (from openai) (1.3.1)\n",
+            "Requirement already satisfied: tqdm>4 in /usr/local/lib/python3.10/dist-packages (from openai) (4.66.6)\n",
+            "Requirement already satisfied: typing-extensions<5,>=4.11 in /usr/local/lib/python3.10/dist-packages (from openai) (4.12.2)\n",
+            "Requirement already satisfied: idna>=2.8 in /usr/local/lib/python3.10/dist-packages (from anyio<5,>=3.5.0->openai) (3.10)\n",
+            "Requirement already satisfied: exceptiongroup in /usr/local/lib/python3.10/dist-packages (from anyio<5,>=3.5.0->openai) (1.2.2)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.10/dist-packages (from httpx<1,>=0.23.0->openai) (2024.8.30)\n",
+            "Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.10/dist-packages (from httpx<1,>=0.23.0->openai) (1.0.6)\n",
+            "Requirement already satisfied: h11<0.15,>=0.13 in /usr/local/lib/python3.10/dist-packages (from httpcore==1.*->httpx<1,>=0.23.0->openai) (0.14.0)\n",
+            "Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.10/dist-packages (from pydantic<3,>=1.9.0->openai) (0.7.0)\n",
+            "Requirement already satisfied: pydantic-core==2.23.4 in /usr/local/lib/python3.10/dist-packages (from pydantic<3,>=1.9.0->openai) (2.23.4)\n",
+            "Downloading openai-1.54.3-py3-none-any.whl (389 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m389.6/389.6 kB\u001b[0m \u001b[31m6.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: openai\n",
+            "  Attempting uninstall: openai\n",
+            "    Found existing installation: openai 1.52.2\n",
+            "    Uninstalling openai-1.52.2:\n",
+            "      Successfully uninstalled openai-1.52.2\n",
+            "Successfully installed openai-1.54.3\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install --upgrade openai"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "30gMACxEQF0J",
+        "outputId": "217d2d8c-48be-402b-85cf-be086b908520"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting openai==0.28\n",
+            "  Downloading openai-0.28.0-py3-none-any.whl.metadata (13 kB)\n",
+            "Requirement already satisfied: requests>=2.20 in /usr/local/lib/python3.10/dist-packages (from openai==0.28) (2.32.3)\n",
+            "Requirement already satisfied: tqdm in /usr/local/lib/python3.10/dist-packages (from openai==0.28) (4.66.6)\n",
+            "Requirement already satisfied: aiohttp in /usr/local/lib/python3.10/dist-packages (from openai==0.28) (3.10.10)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai==0.28) (3.4.0)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai==0.28) (3.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai==0.28) (2.2.3)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests>=2.20->openai==0.28) (2024.8.30)\n",
+            "Requirement already satisfied: aiohappyeyeballs>=2.3.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai==0.28) (2.4.3)\n",
+            "Requirement already satisfied: aiosignal>=1.1.2 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai==0.28) (1.3.1)\n",
+            "Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai==0.28) (24.2.0)\n",
+            "Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai==0.28) (1.5.0)\n",
+            "Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai==0.28) (6.1.0)\n",
+            "Requirement already satisfied: yarl<2.0,>=1.12.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai==0.28) (1.17.0)\n",
+            "Requirement already satisfied: async-timeout<5.0,>=4.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->openai==0.28) (4.0.3)\n",
+            "Requirement already satisfied: typing-extensions>=4.1.0 in /usr/local/lib/python3.10/dist-packages (from multidict<7.0,>=4.5->aiohttp->openai==0.28) (4.12.2)\n",
+            "Requirement already satisfied: propcache>=0.2.0 in /usr/local/lib/python3.10/dist-packages (from yarl<2.0,>=1.12.0->aiohttp->openai==0.28) (0.2.0)\n",
+            "Downloading openai-0.28.0-py3-none-any.whl (76 kB)\n",
+            "\u001b[?25l   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m0.0/76.5 kB\u001b[0m \u001b[31m?\u001b[0m eta \u001b[36m-:--:--\u001b[0m\r\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m76.5/76.5 kB\u001b[0m \u001b[31m2.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: openai\n",
+            "  Attempting uninstall: openai\n",
+            "    Found existing installation: openai 1.54.3\n",
+            "    Uninstalling openai-1.54.3:\n",
+            "      Successfully uninstalled openai-1.54.3\n",
+            "Successfully installed openai-0.28.0\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install openai==0.28"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "background_save": true,
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "jEuVcQKoOQA6",
+        "outputId": "f4838903-fa88-4e05-d30b-1d27c79fa084"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "ChatGPT Bot: Hello! How can I assist you today?\n",
+            "You: hi\n",
+            "ChatGPT Bot: Error: You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.\n",
+            "You: hi\n",
+            "ChatGPT Bot: Error: You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.\n"
+          ]
+        }
+      ],
+      "source": [
+        "import openai\n",
+        "\n",
+        "# Set your OpenAI API key\n",
+        "# openai.api_key = \"your_api_key_here\"\n",
+        "openai.api_key = \"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\"\n",
+        "\n",
+        "def chat_with_gpt(prompt):\n",
+        "    try:\n",
+        "        response = openai.ChatCompletion.create(\n",
+        "            model=\"gpt-3.5-turbo\",  # Use \"\" if you don't have access to GPT-4\n",
+        "            messages=[\n",
+        "                {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n",
+        "                {\"role\": \"user\", \"content\": prompt}\n",
+        "            ],\n",
+        "            max_tokens=150,\n",
+        "            temperature=0.7,\n",
+        "        )\n",
+        "        # Extract and return the assistant's reply\n",
+        "        return response['choices'][0]['message']['content'].strip()\n",
+        "    except Exception as e:\n",
+        "        return f\"Error: {e}\"\n",
+        "\n",
+        "if __name__ == \"__main__\":  # Corrected this line\n",
+        "    print(\"ChatGPT Bot: Hello! How can I assist you today?\")\n",
+        "    while True:\n",
+        "        user_input = input(\"You: \")\n",
+        "        if user_input.lower() in [\"exit\", \"quit\", \"bye\"]:\n",
+        "            print(\"ChatGPT Bot: Goodbye!\")\n",
+        "            break\n",
+        "        response = chat_with_gpt(user_input)\n",
+        "        print(f\"ChatGPT Bot: {response}\")\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "ApCWajGGPpv_"
+      },
+      "outputs": [],
+      "source": [
+        "from transformers import GPT2LMHeadModel, GPT2Tokenizer\n",
+        "\n",
+        "# Using the GPT-2 model\n",
+        "model_name = \"gpt2\"\n",
+        "tokenizer = GPT2Tokenizer.from_pretrained(model_name)\n",
+        "model = GPT2LMHeadModel.from_pretrained(model_name)\n",
+        "\n",
+        "# Set the pad_token to the eos_token\n",
+        "tokenizer.pad_token = tokenizer.eos_token  # Use eos_token as pad_token\n",
+        "\n",
+        "# Example usage\n",
+        "prompt = input('Enter your prompt: ')\n",
+        "inputs = tokenizer(prompt, return_tensors=\"pt\", padding=True, truncation=True)\n",
+        "\n",
+        "# Set pad_token_id to eos_token_id to avoid the warning\n",
+        "inputs['pad_token_id'] = tokenizer.eos_token_id  # Set pad_token_id to eos_token_id\n",
+        "\n",
+        "# Generate the output\n",
+        "outputs = model.generate(inputs[\"input_ids\"], max_length=50, attention_mask=inputs.get(\"attention_mask\", None))\n",
+        "\n",
+        "# Decode and print the output\n",
+        "print(tokenizer.decode(outputs[0], skip_special_tokens=True))\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "-bTfApZbW_yL"
+      },
+      "outputs": [],
+      "source": [
+        "from transformers import pipeline\n",
+        "\n",
+        "# Using Hugging Face's hosted pipeline for text generation\n",
+        "generator = pipeline(\"text-generation\", model=\"gpt2\")\n",
+        "\n",
+        "prompt = input('enter your prompt')\n",
+        "response = generator(prompt, max_length=50)\n",
+        "print(response[0]['generated_text'])\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "il3HuIwbYG9r"
+      },
+      "outputs": [],
+      "source": []
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
